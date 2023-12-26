@@ -1,4 +1,4 @@
-module github.com/urcop/go-fiber-template
+module github.com/urcop/sber-practice-backend
 
 go 1.20
 
