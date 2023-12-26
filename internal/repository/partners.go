@@ -9,18 +9,18 @@ import (
 )
 
 type PartnersRepository interface {
-	GetPartners() ([]*models.Partners, error)
-	CreatePartner(partner *models.Partners) error
-	GetPartnerByID(id string) (*models.Partners, error)
-	UpdatePartner(partner *models.Partners) error
-	DeletePartner(id string) error
+	Get() ([]*models.Partners, error)
+	Create(partner *models.Partners) error
+	GetByID(id string) (*models.Partners, error)
+	Update(partner *models.Partners) error
+	Delete(id string) error
 }
 
 type PartnersRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func (p PartnersRepositoryImpl) GetPartners() ([]*models.Partners, error) {
+func (p PartnersRepositoryImpl) Get() ([]*models.Partners, error) {
 	var partners []*models.Partners
 	result := p.db.Find(&partners)
 	if result.Error != nil {
@@ -29,7 +29,7 @@ func (p PartnersRepositoryImpl) GetPartners() ([]*models.Partners, error) {
 	return partners, nil
 }
 
-func (p PartnersRepositoryImpl) CreatePartner(partner *models.Partners) error {
+func (p PartnersRepositoryImpl) Create(partner *models.Partners) error {
 	result := p.db.Create(&partner)
 	if result.Error != nil {
 		return result.Error
@@ -37,7 +37,7 @@ func (p PartnersRepositoryImpl) CreatePartner(partner *models.Partners) error {
 	return nil
 }
 
-func (p PartnersRepositoryImpl) GetPartnerByID(id string) (*models.Partners, error) {
+func (p PartnersRepositoryImpl) GetByID(id string) (*models.Partners, error) {
 	var partner *models.Partners
 	result := p.db.Where("id = ?", id).First(&partner)
 	if result.Error != nil {
@@ -46,7 +46,7 @@ func (p PartnersRepositoryImpl) GetPartnerByID(id string) (*models.Partners, err
 	return partner, nil
 }
 
-func (p PartnersRepositoryImpl) UpdatePartner(partner *models.Partners) error {
+func (p PartnersRepositoryImpl) Update(partner *models.Partners) error {
 	result := p.db.Save(&partner)
 	if result.Error != nil {
 		return result.Error
@@ -54,7 +54,7 @@ func (p PartnersRepositoryImpl) UpdatePartner(partner *models.Partners) error {
 	return nil
 }
 
-func (p PartnersRepositoryImpl) DeletePartner(id string) error {
+func (p PartnersRepositoryImpl) Delete(id string) error {
 	result := p.db.Delete("id = ?", id)
 	if result.Error != nil {
 		return result.Error

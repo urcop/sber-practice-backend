@@ -5,16 +5,20 @@ import (
 	"github.com/urcop/sber-practice-backend/internal/app/dependencies"
 	"github.com/urcop/sber-practice-backend/internal/app/initializers"
 	"github.com/urcop/sber-practice-backend/internal/repository"
+	"github.com/urcop/sber-practice-backend/internal/services"
 )
 
 type Application struct{}
 
 func InitApplication(app *fiber.App) {
 	initializers.InitEnv()
-	initializers.SetupRoutes(app)
 
-	repository.NewExampleRepository()
+	partnerRepos := repository.NewExampleRepository()
+	partnerService := services.NewPartnersService(partnerRepos)
 
-	_ = dependencies.Container{}
+	container := dependencies.Container{
+		Partners: partnerService,
+	}
 
+	initializers.SetupRoutes(app, &container)
 }
