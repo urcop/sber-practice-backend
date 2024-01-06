@@ -1,6 +1,8 @@
 package config
 
-import "github.com/gobuffalo/envy"
+import (
+	"os"
+)
 
 type Config struct {
 	HttpServer HttpServer
@@ -28,15 +30,15 @@ func GetConfig() *Config {
 
 	return &Config{
 		HttpServer: HttpServer{
-			Host: envy.Get("HTTP_HOST", "localhost"),
-			Port: envy.Get("HTTP_PORT", "8000"),
+			Host: os.Getenv("HTTP_HOST"),
+			Port: os.Getenv("HTTP_PORT"),
 		},
 		DB: Database{
-			Host:     envy.Get("POSTGRES_HOST", "localhost"),
-			Port:     envy.Get("POSTGRES_PORT", "5432"),
-			User:     envy.Get("POSTGRES_USER", "postgres"),
-			Password: envy.Get("POSTGRES_PASSWORD", "postgres"),
-			Name:     envy.Get("POSTGRES_NAME", "postgres"),
+			Host:     os.Getenv("POSTGRES_HOST"),
+			Port:     os.Getenv("POSTGRES_PORT"),
+			User:     os.Getenv("POSTGRES_USER"),
+			Password: os.Getenv("POSTGRES_PASSWORD"),
+			Name:     os.Getenv("POSTGRES_NAME"),
 		},
 	}
 }
