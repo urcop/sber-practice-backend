@@ -13,12 +13,12 @@ type Application struct{}
 func InitApplication(app *fiber.App) {
 	initializers.InitEnv()
 
-	partnerRepos := repository.NewExampleRepository()
+	partnerRepos := repository.NewPartnersRepository()
 	partnerService := services.NewPartnersService(partnerRepos)
 
-	container := dependencies.Container{
+	container := &dependencies.Container{
 		Partners: partnerService,
 	}
 
-	initializers.SetupRoutes(app, &container)
+	initializers.SetupRoutes(app, container)
 }

@@ -21,12 +21,17 @@ type PartnersRepositoryImpl struct {
 }
 
 func (p PartnersRepositoryImpl) Get() ([]*models.Partners, error) {
-	var partners []*models.Partners
-	result := p.db.Find(&partners)
-	if result.Error != nil {
-		return nil, result.Error
+	var partners []models.Partners
+	p.db.Find(&partners)
+	var partnersResponse []*models.Partners
+
+	for _, partner := range partners {
+		var places []models.Places
+		p.db.Find(&places, "partner_id = ?", partner.PartnerId)
+
+		partnersResponse = append(partnersResponse, CreatePartnersResponse(partner, places))
 	}
-	return partners, nil
+	return partnersResponse, nil
 }
 
 func (p PartnersRepositoryImpl) Create(partner *models.Partners) error {
@@ -39,10 +44,15 @@ func (p PartnersRepositoryImpl) Create(partner *models.Partners) error {
 
 func (p PartnersRepositoryImpl) GetByID(id string) (*models.Partners, error) {
 	var partner *models.Partners
-	result := p.db.Where("id = ?", id).First(&partner)
+	result := p.db.Where("partner_id = ?", id).First(&partner)
 	if result.Error != nil {
 		return nil, result.Error
 	}
+
+	var places []models.Places
+	p.db.Find(&places, "partner_id = ?", id)
+	partner.Places = places
+
 	return partner, nil
 }
 
@@ -55,14 +65,15 @@ func (p PartnersRepositoryImpl) Update(partner *models.Partners) error {
 }
 
 func (p PartnersRepositoryImpl) Delete(id string) error {
-	result := p.db.Delete("id = ?", id)
+	p.db.Where("partner_id = ?", id).Delete(&models.Places{})
+	result := p.db.Delete(&models.Partners{}, "partner_id = ?", id)
 	if result.Error != nil {
 		return result.Error
 	}
 	return nil
 }
 
-func NewExampleRepository() PartnersRepository {
+func NewPartnersRepository() PartnersRepository {
 	cfg := config.GetConfig()
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		cfg.DB.Host, cfg.DB.User, cfg.DB.Password, cfg.DB.Name, cfg.DB.Port)
@@ -74,9 +85,19 @@ func NewExampleRepository() PartnersRepository {
 	}
 
 	pgSvc := &PartnersRepositoryImpl{db: db}
-	err = db.AutoMigrate(&models.Partners{})
+	err = db.AutoMigrate(&models.Partners{}, &models.Places{})
 	if err != nil {
 		panic(err)
 	}
 	return pgSvc
+}
+
+func CreatePartnersResponse(partner models.Partners, places []models.Places) *models.Partners {
+	return &models.Partners{
+		PartnerId:      partner.PartnerId,
+		Title:          partner.Title,
+		Conditions:     partner.Conditions,
+		AdditionalInfo: partner.AdditionalInfo,
+		Places:         places,
+	}
 }
