@@ -2,6 +2,7 @@ package partners
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/urcop/sber-practice-backend/internal/middleware"
 	"github.com/urcop/sber-practice-backend/internal/models"
 	"github.com/urcop/sber-practice-backend/internal/services"
 	"github.com/urcop/sber-practice-backend/internal/web"
@@ -22,6 +23,8 @@ func NewController(partners services.PartnersService) *Controller {
 }
 
 func (ctrl *Controller) DefineRouter(app *fiber.App) {
+
+	app.Use(middleware.AddCors())
 	group := app.Group("/api/v1/partners")
 	{
 
