@@ -2,7 +2,7 @@ package initializers
 
 import (
 	"github.com/gobuffalo/envy"
-	"github.com/urcop/go-fiber-template/pkg/logger"
+	"github.com/urcop/sber-practice-backend/pkg/logger"
 )
 
 func InitEnv() {

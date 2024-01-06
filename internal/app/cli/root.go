@@ -2,7 +2,7 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/urcop/go-fiber-template/pkg/logger"
+	"github.com/urcop/sber-practice-backend/pkg/logger"
 )
 
 // ExecuteRootCmd prepares all CLI commands

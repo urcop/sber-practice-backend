@@ -2,7 +2,7 @@ package status
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/urcop/go-fiber-template/internal/web"
+	"github.com/urcop/sber-practice-backend/internal/web"
 	"net/http"
 )
 

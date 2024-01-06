@@ -2,19 +2,23 @@ package app
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/urcop/go-fiber-template/internal/app/dependencies"
-	"github.com/urcop/go-fiber-template/internal/app/initializers"
-	"github.com/urcop/go-fiber-template/internal/repository"
+	"github.com/urcop/sber-practice-backend/internal/app/dependencies"
+	"github.com/urcop/sber-practice-backend/internal/app/initializers"
+	"github.com/urcop/sber-practice-backend/internal/repository"
+	"github.com/urcop/sber-practice-backend/internal/services"
 )
 
 type Application struct{}
 
 func InitApplication(app *fiber.App) {
 	initializers.InitEnv()
-	initializers.SetupRoutes(app)
 
-	repository.NewExampleRepository()
+	partnerRepos := repository.NewPartnersRepository()
+	partnerService := services.NewPartnersService(partnerRepos)
 
-	_ = dependencies.Container{}
+	container := &dependencies.Container{
+		Partners: partnerService,
+	}
 
+	initializers.SetupRoutes(app, container)
 }
