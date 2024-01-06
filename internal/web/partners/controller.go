@@ -36,6 +36,14 @@ func (ctrl *Controller) DefineRouter(app *fiber.App) {
 	}
 }
 
+// GetPartners
+// @Summary Get all partners
+// @Description Get all partners
+// @Tags partners
+// @Produce json
+// @Success 200 {array} PartnersResponse
+// @Failure 500 {array} ResponseError
+// @Router /api/v1/partners/ [get]
 func (ctrl *Controller) GetPartners(ctx *fiber.Ctx) error {
 	partners, err := ctrl.partners.GetPartners()
 	if err != nil {
@@ -45,6 +53,16 @@ func (ctrl *Controller) GetPartners(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).JSON(partners)
 }
 
+// CreatePartner
+// @Summary Create a new partner
+// @Description Create a new partner
+// @Tags partners
+// @Accept json
+// @Produce json
+// @Param partner body PartnersRequest true "Partner object to be created"
+// @Success 200 {object} PartnersResponse
+// @Failure 500 {array} ResponseError
+// @Router /api/v1/partners/ [post]
 func (ctrl *Controller) CreatePartner(ctx *fiber.Ctx) error {
 	var partner models.Partners
 
@@ -60,6 +78,15 @@ func (ctrl *Controller) CreatePartner(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).JSON(partner)
 }
 
+// GetPartnerByID
+// @Summary Get partner by ID
+// @Description Get partner by ID
+// @Tags partners
+// @Produce json
+// @Param id path string true "Partner ID"
+// @Success 200 {object} PartnersResponse
+// @Failure 500 {array} ResponseError
+// @Router /api/v1/partners/{id} [get]
 func (ctrl *Controller) GetPartnerByID(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 
@@ -70,6 +97,16 @@ func (ctrl *Controller) GetPartnerByID(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).JSON(result)
 }
 
+// UpdatePartner
+// @Summary Update an existing partner
+// @Description Update an existing partner
+// @Tags partners
+// @Accept json
+// @Produce json
+// @Param partner body PartnersRequest true "Updated partner object"
+// @Success 200 {object} PartnersResponse
+// @Failure 500 {array} ResponseError
+// @Router /api/v1/partners/ [put]
 func (ctrl *Controller) UpdatePartner(ctx *fiber.Ctx) error {
 	var partner models.Partners
 
@@ -84,6 +121,14 @@ func (ctrl *Controller) UpdatePartner(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).JSON(partner)
 }
 
+// DeletePartner
+// @Summary Delete partner by ID
+// @Description Delete partner by ID
+// @Tags partners
+// @Produce json
+// @Param id path string true "Partner ID"
+// @Success 200 {string} string "successfully delete partner"
+// @Router /api/v1/partners/{id} [delete]
 func (ctrl *Controller) DeletePartner(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 
