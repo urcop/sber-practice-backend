@@ -16,8 +16,12 @@ func InitApplication(app *fiber.App) {
 	partnerRepos := repository.NewPartnersRepository()
 	partnerService := services.NewPartnersService(partnerRepos)
 
+	userRepository := repository.NewUserRepository()
+	userService := services.NewUserService(userRepository)
+
 	container := &dependencies.Container{
 		Partners: partnerService,
+		Users:    userService,
 	}
 
 	initializers.SetupRoutes(app, container)

@@ -10,6 +10,11 @@ type ResponseError struct {
 	StatusCode int    `json:"statusCode"`
 }
 
+type Message struct {
+	StatusCode int    `json:"statusCode"`
+	Message    string `json:"message"`
+}
+
 func SendError(ctx *fiber.Ctx, statusCode int, err error, message string) error {
 
 	return ctx.Status(statusCode).JSON(ResponseError{
@@ -18,4 +23,11 @@ func SendError(ctx *fiber.Ctx, statusCode int, err error, message string) error 
 		StatusCode: statusCode,
 	})
 
+}
+
+func SendMessage(ctx *fiber.Ctx, statusCode int, message string) error {
+	return ctx.Status(statusCode).JSON(Message{
+		StatusCode: statusCode,
+		Message:    message,
+	})
 }
