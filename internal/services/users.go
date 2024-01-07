@@ -4,7 +4,6 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/urcop/sber-practice-backend/internal/models"
 	"github.com/urcop/sber-practice-backend/internal/repository"
-	"time"
 )
 
 type UserServiceImpl struct {
@@ -13,7 +12,6 @@ type UserServiceImpl struct {
 
 type UserService interface {
 	Login(user *models.User) (string, error)
-	VerifyJWT(token string) error
 	GetUser(email string) (*models.User, error)
 }
 
@@ -30,21 +28,18 @@ func (u *UserServiceImpl) Login(user *models.User) (string, error) {
 	return token, nil
 }
 
-func (u *UserServiceImpl) VerifyJWT(token string) error {
-	panic("implement me")
-}
-
 func (u *UserServiceImpl) GetUser(email string) (*models.User, error) {
 	return u.repos.GetUser(email)
 }
 
 func generateJWT(userEmail string) (string, error) {
-	token := jwt.New(jwt.SigningMethodEdDSA)
-	claims := token.Claims.(jwt.MapClaims)
-
-	claims["exp"] = time.Now().Add(time.Hour * 168)
-	claims["authorized"] = true
-	claims["user"] = userEmail
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &models.Claims{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: 0,
+			IssuedAt:  0,
+		},
+		Email: userEmail,
+	})
 
 	tokenString, err := token.SigningString()
 	if err != nil {
