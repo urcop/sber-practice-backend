@@ -7,6 +7,7 @@ import (
 type Config struct {
 	HttpServer HttpServer
 	DB         Database
+	Admin      Admin
 }
 
 type HttpServer struct {
@@ -19,6 +20,11 @@ type Database struct {
 	User     string
 	Password string
 	Name     string
+}
+
+type Admin struct {
+	Email    string
+	Password string
 }
 
 var config *Config
@@ -39,6 +45,10 @@ func GetConfig() *Config {
 			User:     os.Getenv("POSTGRES_USER"),
 			Password: os.Getenv("POSTGRES_PASSWORD"),
 			Name:     os.Getenv("POSTGRES_NAME"),
+		},
+		Admin: Admin{
+			Email:    os.Getenv("ADMIN_EMAIL"),
+			Password: os.Getenv("ADMIN_PASSWORD"),
 		},
 	}
 }
