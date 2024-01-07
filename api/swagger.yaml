@@ -73,9 +73,64 @@ definitions:
       message:
         type: string
     type: object
+  internal_web_users.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  internal_web_users.LoginResponse:
+    properties:
+      accessToken:
+        type: string
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
+  internal_web_users.ResponseError:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      statusCode:
+        type: integer
+    type: object
 info:
   contact: {}
 paths:
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Generate JWT
+      parameters:
+      - description: Partner object to be created
+        in: body
+        name: partner
+        required: true
+        schema:
+          $ref: '#/definitions/internal_web_users.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_web_users.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_web_users.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/internal_web_users.ResponseError'
+      summary: Generate JWT
+      tags:
+      - users
   /api/v1/partners/:
     get:
       description: Get all partners
