@@ -9,7 +9,7 @@ type Partners struct {
 	PartnerId      string      `gorm:"primaryKey" json:"partnerId,omitempty"`
 	Title          string      `json:"title"`
 	Conditions     StringSlice `gorm:"type:json" json:"conditions"`
-	AdditionalInfo string      `json:"AdditionalInfo"`
+	AdditionalInfo string      `json:"additionalInfo"`
 	Places         []Places    `gorm:"foreignKey:PartnerID" json:"places"`
 }
 
